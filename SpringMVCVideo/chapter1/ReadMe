@@ -1,0 +1,52 @@
+使用SpringMVC写HelloWorld
+步骤：
+1，加入Jar包
+2，web.xml中配置DispatcherServlet
+3,加入SpringMVC配置文件
+4，编写处理请求的处理器
+5，编写视图
+
+Step2： web.xml
+<!--  配置DispatcherServlet -->  
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+Step 4：
+写处理器
+@Controller
+public class HelloWorld {
+	//映射请求的URL，返回值通过视图解析器解析为实际的物理视图，
+  //对于InternalResourceViewResolver这个视图解析器做前缀，返回值 后缀， 得到实际物理视图，然后做转发操作
+  @RequestMapping("/helloworld") 
+	public String hello(){
+		System.out.println("hello world");
+		return "success";
+	}
+}
+
+Step5 写视图,这是最终的跳转
+WEB-INF -- views--success.jsp
+
+
+Step6 写请求 index.jsp。这是最开始的页面 
+<a href="helloworld">Hello World</a>
+
+Step 7 配置视图解析器 dispatcherServlet-servlet.xml
+
+<!-- 配置自动扫描的包 --> 这样Controller注解才会起作用
+	<context:component-scan base-package="com.atguigu.springmvc"></context:component-scan>
+
+	<!-- 配置视图解析器: 如何把 handler 方法返回值解析为实际的物理视图 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+
